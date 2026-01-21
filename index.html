@@ -4,281 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bhor • Blog</title>
-    <meta name="description" content="Thoughts, stories, and ideas from Bhor">
+    <meta name="description" content="Minimal blog by Omkar Bhor">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <!-- Navigation -->
-    <nav class="navigation">
-        <div class="nav-container">
-            <a href="/" class="nav-logo">BHOR</a>
-            <div class="nav-links">
-                <a href="#" class="nav-link">[B] BLOG</a>
-                <a href="#" class="nav-link">[A] ABOUT</a>
-                <a href="#" class="nav-link">[C] CONTACT</a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-decorations">
-            <span class="decoration">+</span>
-            <span class="decoration">+</span>
-            <span class="decoration">+</span>
-            <span class="decoration">+</span>
-            <span class="decoration">+</span>
-            <span class="decoration">+</span>
-        </div>
-        <div class="hero-content">
-            <h1 class="hero-title">Welcome to<br>Bhor Dot Blog</h1>
-            <p class="hero-subtitle">Thoughts, stories, and explorations on technology, creativity, and everything in between.</p>
-        </div>
-    </section>
-
-    <!-- Feed Section -->
-    <section class="feed">
-        <div class="feed-container">
-            <div class="feed-header">
-                <h2 class="feed-title">Feed<span class="feed-count">(12)</span></h2>
-                <div class="feed-controls">
-                    <button class="feed-filter-toggle">/ FILTER</button>
-                    <button class="feed-sort">/ DATE</button>
-                    <button class="feed-sort">/ NAME</button>
-                    <button class="feed-sort active">/ TYPE</button>
+<body class="nuke-bg">
+    <main class="nuke-main">
+        <h1 class="nuke-title">Bhor Dot Blog</h1>
+        <nav class="nuke-nav">
+            <a href="#" class="nuke-link">BLOG</a>
+            <a href="#" class="nuke-link">ABOUT</a>
+            <a href="#" class="nuke-link">CONTACT</a>
+        </nav>
+        <section class="nuke-blog">
+            <article class="nuke-post">
+                <h2 class="nuke-post-title">Building in Public: Lessons from a Year of Sharing</h2>
+                <div class="nuke-post-meta">
+                    <span class="nuke-link">2026.01.18</span> · <span class="nuke-link">WRITING</span>
                 </div>
-            </div>
-
-            <div class="feed-layout">
-                <!-- Filter Sidebar -->
-                <aside class="feed-filters">
-                    <div class="filter-section">
-                        <button class="filter-header">
-                            <span class="filter-icon">📁</span>
-                            <span>Type</span>
-                            <span class="filter-arrow">▼</span>
-                        </button>
-                        <div class="filter-options">
-                            <label class="filter-option">
-                                <input type="checkbox" name="type" value="article">
-                                <span>Article <span class="filter-count">(8)</span></span>
-                            </label>
-                            <label class="filter-option">
-                                <input type="checkbox" name="type" value="essay">
-                                <span>Essay <span class="filter-count">(4)</span></span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="filter-section">
-                        <button class="filter-header">
-                            <span class="filter-icon">📁</span>
-                            <span>Topic</span>
-                            <span class="filter-arrow">▼</span>
-                        </button>
-                        <div class="filter-options">
-                            <label class="filter-option">
-                                <input type="checkbox" name="topic" value="technology">
-                                <span>Technology <span class="filter-count">(5)</span></span>
-                            </label>
-                            <label class="filter-option">
-                                <input type="checkbox" name="topic" value="design">
-                                <span>Design <span class="filter-count">(3)</span></span>
-                            </label>
-                            <label class="filter-option">
-                                <input type="checkbox" name="topic" value="writing">
-                                <span>Writing <span class="filter-count">(2)</span></span>
-                            </label>
-                            <label class="filter-option">
-                                <input type="checkbox" name="topic" value="life">
-                                <span>Life <span class="filter-count">(2)</span></span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <button class="filter-clear">CLEAR FILTERS</button>
-                </aside>
-
-                <!-- Feed Items -->
-                <div class="feed-items">
-                    <!-- Feed Item 1 - Active/Expanded -->
-                    <article class="feed-item active">
-                        <div class="feed-item-header">
-                            <span class="feed-item-marker">■</span>
-                            <time class="feed-item-date">2026.01.18</time>
-                            <h3 class="feed-item-title">Building in Public: Lessons from a Year of Sharing</h3>
-                            <span class="badge badge-article">ARTICLE</span>
-                            <button class="feed-item-expand">+</button>
-                        </div>
-                        <div class="feed-item-content">
-                            <div class="feed-item-summary">
-                                <p><strong>SUMMARY:</strong> Reflecting on a year of sharing my work, thoughts, and failures publicly. What I learned about vulnerability, community, and the power of documentation.</p>
-                                <p><strong>AUTHOR:</strong> Omkar Bhor</p>
-                            </div>
-                            <div class="feed-item-meta">
-                                <span class="feed-item-topic">TOPIC: <span class="topic-tag">WRITING</span></span>
-                            </div>
-                            <button class="button">Read</button>
-                        </div>
-                    </article>
-
-                    <!-- Feed Item 2 -->
-                    <article class="feed-item">
-                        <div class="feed-item-header">
-                            <span class="feed-item-marker">■</span>
-                            <time class="feed-item-date">2026.01.15</time>
-                            <h3 class="feed-item-title">The Art of Minimalist Design: Less is Exponentially More</h3>
-                            <span class="badge badge-essay">ESSAY</span>
-                            <button class="feed-item-expand">+</button>
-                        </div>
-                    </article>
-
-                    <!-- Feed Item 3 -->
-                    <article class="feed-item">
-                        <div class="feed-item-header">
-                            <span class="feed-item-marker">■</span>
-                            <time class="feed-item-date">2026.01.12</time>
-                            <h3 class="feed-item-title">Why I Switched from React to Vanilla JavaScript</h3>
-                            <span class="badge badge-article">ARTICLE</span>
-                            <button class="feed-item-expand">+</button>
-                        </div>
-                    </article>
-
-                    <!-- Feed Item 4 -->
-                    <article class="feed-item">
-                        <div class="feed-item-header">
-                            <span class="feed-item-marker">■</span>
-                            <time class="feed-item-date">2026.01.08</time>
-                            <h3 class="feed-item-title">Deep Work in a Distracted World: My 90-Day Experiment</h3>
-                            <span class="badge badge-essay">ESSAY</span>
-                            <button class="feed-item-expand">+</button>
-                        </div>
-                    </article>
-
-                    <!-- Feed Item 5 -->
-                    <article class="feed-item">
-                        <div class="feed-item-header">
-                            <span class="feed-item-marker">■</span>
-                            <time class="feed-item-date">2026.01.05</time>
-                            <h3 class="feed-item-title">Understanding Typography: A Designer's Guide</h3>
-                            <span class="badge badge-article">ARTICLE</span>
-                            <button class="feed-item-expand">+</button>
-                        </div>
-                    </article>
-
-                    <!-- Feed Item 6 -->
-                    <article class="feed-item">
-                        <div class="feed-item-header">
-                            <span class="feed-item-marker">■</span>
-                            <time class="feed-item-date">2026.01.02</time>
-                            <h3 class="feed-item-title">The Power of Writing Every Day</h3>
-                            <span class="badge badge-article">ARTICLE</span>
-                            <button class="feed-item-expand">+</button>
-                        </div>
-                    </article>
-
-                    <!-- Feed Item 7 -->
-                    <article class="feed-item">
-                        <div class="feed-item-header">
-                            <span class="feed-item-marker">■</span>
-                            <time class="feed-item-date">2025.12.28</time>
-                            <h3 class="feed-item-title">Creating Sustainable Creative Habits</h3>
-                            <span class="badge badge-essay">ESSAY</span>
-                            <button class="feed-item-expand">+</button>
-                        </div>
-                    </article>
-
-                    <!-- Feed Item 8 -->
-                    <article class="feed-item">
-                        <div class="feed-item-header">
-                            <span class="feed-item-marker">■</span>
-                            <time class="feed-item-date">2025.12.25</time>
-                            <h3 class="feed-item-title">Web Performance Optimization: The Basics</h3>
-                            <span class="badge badge-article">ARTICLE</span>
-                            <button class="feed-item-expand">+</button>
-                        </div>
-                    </article>
-
-                    <!-- Feed Item 9 -->
-                    <article class="feed-item">
-                        <div class="feed-item-header">
-                            <span class="feed-item-marker">■</span>
-                            <time class="feed-item-date">2025.12.20</time>
-                            <h3 class="feed-item-title">Learning in Public: Why You Should Start Today</h3>
-                            <span class="badge badge-essay">ESSAY</span>
-                            <button class="feed-item-expand">+</button>
-                        </div>
-                    </article>
-
-                    <!-- Feed Item 10 -->
-                    <article class="feed-item">
-                        <div class="feed-item-header">
-                            <span class="feed-item-marker">■</span>
-                            <time class="feed-item-date">2025.12.15</time>
-                            <h3 class="feed-item-title">The Future of Web Design: Trends for 2026</h3>
-                            <span class="badge badge-article">ARTICLE</span>
-                            <button class="feed-item-expand">+</button>
-                        </div>
-                    </article>
-
-                    <!-- Feed Item 11 -->
-                    <article class="feed-item">
-                        <div class="feed-item-header">
-                            <span class="feed-item-marker">■</span>
-                            <time class="feed-item-date">2025.12.10</time>
-                            <h3 class="feed-item-title">Embracing Constraints: How Limits Fuel Creativity</h3>
-                            <span class="badge badge-essay">ESSAY</span>
-                            <button class="feed-item-expand">+</button>
-                        </div>
-                    </article>
-
-                    <!-- Feed Item 12 -->
-                    <article class="feed-item">
-                        <div class="feed-item-header">
-                            <span class="feed-item-marker">■</span>
-                            <time class="feed-item-date">2025.12.05</time>
-                            <h3 class="feed-item-title">Building a Personal Website in 2025</h3>
-                            <span class="badge badge-article">ARTICLE</span>
-                            <button class="feed-item-expand">+</button>
-                        </div>
-                    </article>
+                <p>Reflecting on a year of sharing my work, thoughts, and failures publicly. What I learned about vulnerability, community, and the power of documentation.</p>
+            </article>
+            <article class="nuke-post">
+                <h2 class="nuke-post-title">The Art of Minimalist Design: Less is Exponentially More</h2>
+                <div class="nuke-post-meta">
+                    <span class="nuke-link">2026.01.15</span> · <span class="nuke-link">DESIGN</span>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-columns">
-                <div class="footer-column">
-                    <h3 class="footer-heading">/ ABOUT</h3>
-                    <p class="footer-text">Personal blog by Omkar Bhor. Writing about technology, design, and life.</p>
-                </div>
-                <div class="footer-column">
-                    <h3 class="footer-heading">/ SOCIAL</h3>
-                    <div class="footer-links">
-                        <a href="#" class="footer-link">TWITTER</a>
-                        <a href="#" class="footer-link">GITHUB</a>
-                        <a href="#" class="footer-link">LINKEDIN</a>
-                    </div>
-                </div>
-                <div class="footer-column">
-                    <h3 class="footer-heading">/ SUBSCRIBE</h3>
-                    <p class="footer-text">Get new posts delivered to your inbox.</p>
-                    <button class="button">Subscribe</button>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>© 2026 OMKAR BHOR</p>
-                <div class="footer-legal">
-                    <a href="#">PRIVACY</a>
-                    <a href="#">RSS</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script src="script.js"></script>
+                <p>Exploring the philosophy and practice of minimalist design in digital products and everyday life.</p>
+            </article>
+            <!-- Add more posts as needed -->
+        </section>
+    </main>
 </body>
 </html>
