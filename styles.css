@@ -71,3 +71,22 @@ a:hover {
 ul, ol {
   margin-left: 2rem;
 }
+
+@font-face {
+  font-family: 'Berserk';
+  src: url('berserk-font/Swiss 911 Compressed Regular/Swiss 911 Compressed Regular.otf') format('opentype');
+  font-display: swap;
+}
+
+.berserk-font {
+  font-family: 'Berserk', Helvetica, Arial, sans-serif;
+  font-size: 1.25em;
+  letter-spacing: 0.02em;
+  color: #A68AF9;
+  text-shadow: 2px 2px 0 #000, 4px 4px 0 #1e1e1e;
+  transition: color 0.2s;
+}
+
+.berserk-font:hover {
+  color: #fff;
+}
