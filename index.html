@@ -8,7 +8,39 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <main id="md-root"></main>
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle sidebar">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M2 3h12v1H2V3zm0 4h12v1H2V7zm0 4h12v1H2v-1z"/>
+                </svg>
+            </button>
+        </div>
+        <nav class="sidebar-nav" id="sidebar-nav">
+            <!-- Posts will be dynamically added here -->
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div id="main-container" class="main-container">
+        <!-- Tab Bar -->
+        <div class="tab-bar" id="tab-bar">
+            <button id="sidebar-toggle-main" class="sidebar-toggle-main" aria-label="Open sidebar">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M2 3h12v1H2V3zm0 4h12v1H2V7zm0 4h12v1H2v-1z"/>
+                </svg>
+            </button>
+            <!-- Tabs will be dynamically added here -->
+        </div>
+
+        <!-- Breadcrumb -->
+        <div class="breadcrumb" id="breadcrumb"></div>
+
+        <!-- Content -->
+        <main id="md-root" class="content"></main>
+    </div>
+
     <script src="marked.min.js"></script>
     <script src="script.js"></script>
 </body>
