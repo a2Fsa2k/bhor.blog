@@ -158,20 +158,26 @@ function loadMarkdown(path, pushState = true) {
   if (path !== 'content/people.md') {
     peopleObserverActive = false;
   }
-  
-  fetch('/' + path.replace(/^\/?content\//, 'content/'))
-    .then(response => response.text())
+
+  // Use relative URLs so the site works when hosted under a subpath (e.g. GitHub Pages)
+  const mdUrl = path.replace(/^\/?/, '');
+
+  fetch(mdUrl)
+    .then(response => {
+      if (!response.ok) throw new Error(`Failed to load ${mdUrl}: ${response.status}`);
+      return response.text();
+    })
     .then(text => {
       // Parse frontmatter
       let banner = null;
       let content = text;
-      
+
       if (text.startsWith('---')) {
         const endOfFrontmatter = text.indexOf('---', 3);
         if (endOfFrontmatter !== -1) {
           const frontmatter = text.substring(3, endOfFrontmatter).trim();
           content = text.substring(endOfFrontmatter + 3).trim();
-          
+
           // Extract banner URL
           const bannerMatch = frontmatter.match(/banner:\s*(.+)/);
           if (bannerMatch) {
@@ -179,21 +185,25 @@ function loadMarkdown(path, pushState = true) {
           }
         }
       }
-      
+
       // Render markdown
       let html = marked.parse(content);
-      
+
       // Add banner if it exists
       if (banner) {
         html = `<img src="${banner}" alt="Banner" class="banner-image">` + html;
       }
-      
+
       document.getElementById('md-root').innerHTML = html;
       updateBreadcrumb(path);
       updateLinks();
       if (pushState) {
         window.history.pushState({ mdPath: path }, '', '#' + path.replace(/^content\//, ''));
       }
+    })
+    .catch(err => {
+      console.error(err);
+      document.getElementById('md-root').innerHTML = `<div class="loading">Error loading page</div>`;
     });
 }
 
@@ -290,12 +300,14 @@ function parseFrontmatter(text) {
 async function loadBooks() {
   const grid = document.getElementById('books-grid');
   if (!grid) return; // Not on library page
-  
+
   grid.innerHTML = '<div class="loading">Loading books...</div>';
 
   try {
     const bookPromises = books.map(async (filename) => {
-      const response = await fetch(BOOKS_PATH + filename);
+      const url = BOOKS_PATH + filename;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`Failed to load ${url}: ${response.status}`);
       const text = await response.text();
       const { frontmatter, content } = parseFrontmatter(text);
       return {
@@ -475,7 +487,9 @@ async function loadPeople() {
 
   try {
     const peoplePromises = people.map(async (filename) => {
-      const response = await fetch(PEOPLE_PATH + filename);
+      const url = PEOPLE_PATH + filename;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`Failed to load ${url}: ${response.status}`);
       const text = await response.text();
       const { frontmatter, content } = parsePeopleFrontmatter(text);
       return {
