@@ -3,10 +3,9 @@
 Welcome to my minimalist Markdown-powered blog!
 
 ## Posts
-- [Building in Public](content/post1.md)
-- [Minimalist Design](content/post2.md)
-- [Reading BERSERK](content/berserk.md)
-- [Gargantua: The Black Hole](content/gargantua.md)
+- [The 11 Lines of Code That Almost Broke the Internet](content/11-lines-of-code-that-almost-broke-the-internet.md)
+- [Library](content/library.md)
+- [Interesting People](content/people.md)
 
 ## Links
 - [Letterboxd](https://letterboxd.com/urngmi/)
