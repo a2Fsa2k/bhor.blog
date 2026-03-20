@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Library • Bhor</title>
+    <meta name="description" content="Personal book library and reading notes">
+    <link rel="icon" type="image/png" href="../blog.png">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="library.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle sidebar">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M2 3h12v1H2V3zm0 4h12v1H2V7zm0 4h12v1H2v-1z"/>
+                </svg>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="sidebar-item active" onclick="window.location.href='../index.html'">← Back to Blog</div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div id="main-container" class="main-container">
+        <!-- Tab Bar -->
+        <div class="tab-bar" id="tab-bar">
+            <button id="sidebar-toggle-main" class="sidebar-toggle-main" aria-label="Open sidebar">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M2 3h12v1H2V3zm0 4h12v1H2V7zm0 4h12v1H2v-1z"/>
+                </svg>
+            </button>
+            <div class="tab active">
+                <span>Book Library</span>
+            </div>
+        </div>
+
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <span style="color: #999">library</span>
+        </div>
+
+        <!-- Content -->
+        <main id="library-content" class="content">
+            <h1>Book Library</h1>
+            <p style="color: #999; margin-bottom: 2rem;">My personal reading collection and notes</p>
+            
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">All</button>
+                <button class="filter-tab" data-filter="completed">Completed</button>
+                <button class="filter-tab" data-filter="reading">Reading</button>
+                <button class="filter-tab" data-filter="want-to-read">Want to Read</button>
+            </div>
+
+            <!-- Books Grid -->
+            <div id="books-grid" class="books-grid">
+                <!-- Books will be loaded here -->
+            </div>
+
+            <!-- Book Detail View (hidden by default) -->
+            <div id="book-detail" class="book-detail" style="display: none;">
+                <button id="back-to-grid" class="back-button">← Back to Library</button>
+                <div id="book-detail-content"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../marked.min.js"></script>
+    <script src="library.js"></script>
+</body>
+</html>

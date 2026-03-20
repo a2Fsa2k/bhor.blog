@@ -3,15 +3,19 @@
 // Available posts
 const posts = [
   { name: 'Home', path: 'content/home.md' },
-  { name: 'Building in Public', path: 'content/post1.md' },
-  { name: 'Minimalist Design', path: 'content/post2.md' },
-  { name: 'BERSERK manga', path: 'content/berserk.md' },
-  { name: 'Gargantua: The Black Hole', path: 'content/gargantua.md' }
+  { name: 'The 11 Lines of Code That Almost Broke the Internet', path: 'content/11-lines-of-code-that-almost-broke-the-internet.md' },
+  { name: 'Library', path: 'content/library.md' },
+  { name: 'Interesting People', path: 'content/people.md' }
+  // Removed demo posts
 ];
 
 // Open tabs
 let openTabs = [];
 let activeTab = null;
+
+// Observer flags to prevent infinite loops
+let libraryObserverActive = false;
+let peopleObserverActive = false;
 
 // Initialize sidebar
 function initSidebar() {
@@ -146,10 +150,45 @@ function updateSidebarActive(path) {
 
 // Load Markdown content
 function loadMarkdown(path, pushState = true) {
+  // Reset observer flags when loading new content
+  // This allows grids to reload when revisiting the page
+  if (path !== 'content/library.md') {
+    libraryObserverActive = false;
+  }
+  if (path !== 'content/people.md') {
+    peopleObserverActive = false;
+  }
+  
   fetch('/' + path.replace(/^\/?content\//, 'content/'))
     .then(response => response.text())
     .then(text => {
-      document.getElementById('md-root').innerHTML = marked.parse(text);
+      // Parse frontmatter
+      let banner = null;
+      let content = text;
+      
+      if (text.startsWith('---')) {
+        const endOfFrontmatter = text.indexOf('---', 3);
+        if (endOfFrontmatter !== -1) {
+          const frontmatter = text.substring(3, endOfFrontmatter).trim();
+          content = text.substring(endOfFrontmatter + 3).trim();
+          
+          // Extract banner URL
+          const bannerMatch = frontmatter.match(/banner:\s*(.+)/);
+          if (bannerMatch) {
+            banner = bannerMatch[1].trim();
+          }
+        }
+      }
+      
+      // Render markdown
+      let html = marked.parse(content);
+      
+      // Add banner if it exists
+      if (banner) {
+        html = `<img src="${banner}" alt="Banner" class="banner-image">` + html;
+      }
+      
+      document.getElementById('md-root').innerHTML = html;
       updateBreadcrumb(path);
       updateLinks();
       if (pushState) {
@@ -207,4 +246,286 @@ const initialPath = window.location.hash ? 'content/' + window.location.hash.sli
 const initialPost = posts.find(p => p.path === initialPath) || posts[0];
 openPost(initialPost.path, initialPost.name);
 window.history.replaceState({ mdPath: initialPost.path }, '', '#' + initialPost.path.replace('content/', ''));
+
+
+// ===== LIBRARY FUNCTIONALITY =====
+
+const BOOKS_PATH = 'content/books/';
+const books = [
+  'dune.md',
+  'project-hail-mary.md',
+  'three-body-problem.md',
+  'neuromancer.md'
+];
+
+let allBooks = [];
+let currentFilter = 'all';
+
+// Parse frontmatter from markdown
+function parseFrontmatter(text) {
+  if (!text.startsWith('---')) {
+    return { frontmatter: {}, content: text };
+  }
+
+  const endOfFrontmatter = text.indexOf('---', 3);
+  if (endOfFrontmatter === -1) {
+    return { frontmatter: {}, content: text };
+  }
+
+  const frontmatterText = text.substring(3, endOfFrontmatter).trim();
+  const content = text.substring(endOfFrontmatter + 3).trim();
+
+  const frontmatter = {};
+  frontmatterText.split('\n').forEach(line => {
+    const match = line.match(/^(\w+):\s*(.+)$/);
+    if (match) {
+      frontmatter[match[1]] = match[2].trim();
+    }
+  });
+
+  return { frontmatter, content };
+}
+
+// Load all books
+async function loadBooks() {
+  const grid = document.getElementById('books-grid');
+  if (!grid) return; // Not on library page
+  
+  grid.innerHTML = '<div class="loading">Loading books...</div>';
+
+  try {
+    const bookPromises = books.map(async (filename) => {
+      const response = await fetch(BOOKS_PATH + filename);
+      const text = await response.text();
+      const { frontmatter, content } = parseFrontmatter(text);
+      return {
+        filename,
+        ...frontmatter,
+        content
+      };
+    });
+
+    allBooks = await Promise.all(bookPromises);
+    renderGrid();
+    initializeLibraryFilters();
+  } catch (error) {
+    console.error('Error loading books:', error);
+    grid.innerHTML = '<div class="loading">Error loading books</div>';
+  }
+}
+
+// Render books grid
+function renderGrid(filter = 'all') {
+  const grid = document.getElementById('books-grid');
+  if (!grid) return;
+  
+  let booksToShow = allBooks;
+  if (filter !== 'all') {
+    booksToShow = allBooks.filter(book => book.status === filter);
+  }
+
+  if (booksToShow.length === 0) {
+    grid.innerHTML = '<div class="loading">No books found</div>';
+    return;
+  }
+
+  grid.innerHTML = booksToShow.map(book => `
+    <div class="book-card" onclick="showBookDetail('${book.filename}')">
+      ${book.cover ? 
+        `<img src="${book.cover}" alt="${book.title}" class="book-cover" onerror="this.outerHTML='<div class=\\'book-cover placeholder\\'>📚</div>'">` :
+        `<div class="book-cover placeholder">📚</div>`
+      }
+      <div class="book-info">
+        <div class="book-title">${book.title}</div>
+        <div class="book-author">${book.author}</div>
+        <span class="book-status ${book.status}">${book.status.replace('-', ' ')}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Show book detail
+function showBookDetail(filename) {
+  const book = allBooks.find(b => b.filename === filename);
+  if (!book) return;
+
+  const grid = document.getElementById('books-grid');
+  const detail = document.getElementById('book-detail');
+  const detailContent = document.getElementById('book-detail-content');
+  const filters = document.getElementById('library-filters');
+
+  // Hide grid and filters, show detail
+  grid.style.display = 'none';
+  if (filters) filters.style.display = 'none';
+  detail.style.display = 'block';
+
+  // Render detail view
+  detailContent.innerHTML = `
+    <div class="book-detail-header">
+      <div class="book-detail-cover">
+        ${book.cover ? 
+          `<img src="${book.cover}" alt="${book.title}" onerror="this.outerHTML='<div class=\\'book-cover placeholder\\' style=\\'width:100%;height:375px;\\'>📚</div>'">` :
+          `<div class="book-cover placeholder" style="width:100%;height:375px;">📚</div>`
+        }
+      </div>
+      <div class="book-detail-meta">
+        <h1 class="book-detail-title">${book.title}</h1>
+        <div class="book-detail-author">by ${book.author}</div>
+        <span class="book-status ${book.status}">${book.status.replace('-', ' ')}</span>
+        <div style="margin-top: 1.5rem;">
+          ${book.year ? `<div class="book-meta-item"><span class="book-meta-label">Year:</span><span class="book-meta-value">${book.year}</span></div>` : ''}
+          ${book.rating ? `<div class="book-meta-item"><span class="book-meta-label">Rating:</span><span class="book-meta-value">${'⭐'.repeat(parseInt(book.rating))}</span></div>` : ''}
+        </div>
+      </div>
+    </div>
+    <div class="book-detail-notes">
+      ${marked.parse(book.content)}
+    </div>
+  `;
+
+  // Scroll to top
+  document.getElementById('md-root').scrollTo(0, 0);
+}
+
+// Initialize library filter buttons
+function initializeLibraryFilters() {
+  const filterTabs = document.querySelectorAll('.filter-tab');
+  const backButton = document.getElementById('back-to-grid');
+  
+  // Filter tabs
+  filterTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      filterTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      currentFilter = tab.dataset.filter;
+      renderGrid(currentFilter);
+    });
+  });
+  
+  // Back button
+  if (backButton) {
+    backButton.addEventListener('click', () => {
+      const grid = document.getElementById('books-grid');
+      const detail = document.getElementById('book-detail');
+      const filters = document.getElementById('library-filters');
+      
+      grid.style.display = 'grid';
+      if (filters) filters.style.display = 'flex';
+      detail.style.display = 'none';
+    });
+  }
+}
+
+// Check if we're on the library page and load books
+const observer = new MutationObserver(() => {
+  if (!libraryObserverActive && document.getElementById('books-grid')) {
+    libraryObserverActive = true;
+    loadBooks();
+  }
+});
+
+observer.observe(document.getElementById('md-root'), { childList: true, subtree: true });
+
+
+// ===== PEOPLE FUNCTIONALITY =====
+
+const PEOPLE_PATH = 'content/people/';
+const people = [
+  'carl-jung.md',
+  'alan-turing.md',
+  'claude-shannon.md',
+  'nietzsche.md',
+  'dostoevsky.md',
+  'kanye-west.md'
+];
+
+let allPeople = [];
+
+// Parse frontmatter from markdown (reuse from library)
+function parsePeopleFrontmatter(text) {
+  if (!text.startsWith('---')) {
+    return { frontmatter: {}, content: text };
+  }
+
+  const endOfFrontmatter = text.indexOf('---', 3);
+  if (endOfFrontmatter === -1) {
+    return { frontmatter: {}, content: text };
+  }
+
+  const frontmatterText = text.substring(3, endOfFrontmatter).trim();
+  const content = text.substring(endOfFrontmatter + 3).trim();
+
+  const frontmatter = {};
+  frontmatterText.split('\n').forEach(line => {
+    const match = line.match(/^(\w+):\s*(.+)$/);
+    if (match) {
+      frontmatter[match[1]] = match[2].trim();
+    }
+  });
+
+  return { frontmatter, content };
+}
+
+// Load all people
+async function loadPeople() {
+  const container = document.getElementById('people-grid-container');
+  if (!container) return;
+  
+  container.innerHTML = '<div class="loading">Loading people</div>';
+
+  try {
+    const peoplePromises = people.map(async (filename) => {
+      const response = await fetch(PEOPLE_PATH + filename);
+      const text = await response.text();
+      const { frontmatter, content } = parsePeopleFrontmatter(text);
+      return {
+        filename,
+        ...frontmatter,
+        content
+      };
+    });
+
+    allPeople = await Promise.all(peoplePromises);
+    renderPeopleGrid();
+  } catch (error) {
+    console.error('Error loading people:', error);
+    container.innerHTML = '<div class="loading">Error loading people</div>';
+  }
+}
+
+// Render people grid
+function renderPeopleGrid() {
+  const container = document.getElementById('people-grid-container');
+  if (!container) return;
+
+  if (allPeople.length === 0) {
+    container.innerHTML = '<div class="loading">No people found</div>';
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="people-grid">
+      ${allPeople.map(person => `
+        <a href="${person.wikipedia}" target="_blank" class="person-card">
+          ${person.photo ? 
+            `<img src="${person.photo}" alt="${person.name}" class="person-photo" onerror="this.outerHTML='<div class=\\'person-photo placeholder\\'>👤</div>'">` :
+            `<div class="person-photo placeholder">👤</div>`
+          }
+          <div class="person-name">${person.name}</div>
+          <div class="person-field">${person.field}</div>
+        </a>
+      `).join('')}
+    </div>
+  `;
+}
+
+// Check if we're on the people page and load people
+const peopleObserver = new MutationObserver(() => {
+  if (!peopleObserverActive && document.getElementById('people-grid-container')) {
+    peopleObserverActive = true;
+    loadPeople();
+  }
+});
+
+peopleObserver.observe(document.getElementById('md-root'), { childList: true, subtree: true });
 

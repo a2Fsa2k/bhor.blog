@@ -1,3 +1,7 @@
+---
+banner: https://4kwallpapers.com/images/walls/thumbs_3t/9621.jpg
+---
+
 # Gargantua: The Black Hole That Changed Science Fiction Forever
 
 When Christopher Nolan's *Interstellar* hit theaters in 2014, it brought with it one of the most scientifically accurate depictions of a black hole ever created. This wasn't just CGI wizardry—it was the result of a collaboration between Hollywood and theoretical physicist Kip Thorne, who would later win the Nobel Prize in Physics for his work on gravitational waves.
